@@ -198,9 +198,7 @@ app.delete("/events/:id", async (req, res) => {
   }
 });
 
-// const PORT = 4000;
-// app.listen(PORT, () => {
-//   console.log(`Server Running on port: ${PORT}`);
-// });
-const serverless = require("serverless-http");
-module.exports.handler = serverless(app);
+const PORT = 4000;
+app.listen(PORT, () => {
+  console.log(`Server Running on port: ${PORT}`);
+});
