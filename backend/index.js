@@ -33,16 +33,17 @@ const createEvent = async (event) => {
   }
 };
 
-app.post("/events", async (req, res) => {
+app.post("/api/events", async (req, res) => {
   try {
+    console.log("Incoming request:", req.body);
     const savedEvent = await createEvent(req.body);
-    res
-      .status(201)
-      .json({ message: "Event added successfully", event: savedEvent });
+    res.status(201).json({ message: "Event added successfully", event: savedEvent });
   } catch (error) {
-    res.status(500).json({ error: "Failed to add event" });
+    console.error("Error adding event:", error);
+    res.status(500).json({ error: `Failed to add event: ${error.message}` });
   }
 });
+
 
 const readAllEvents = async () => {
   try {
@@ -197,7 +198,9 @@ app.delete("/events/:id", async (req, res) => {
   }
 });
 
-const PORT = 4000;
-app.listen(PORT, () => {
-  console.log(`Server Running on port: ${PORT}`);
-});
+// const PORT = 4000;
+// app.listen(PORT, () => {
+//   console.log(`Server Running on port: ${PORT}`);
+// });
+const serverless = require("serverless-http");
+module.exports.handler = serverless(app);
