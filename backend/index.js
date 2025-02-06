@@ -33,7 +33,7 @@ const createEvent = async (event) => {
   }
 };
 
-app.post("/api/events", async (req, res) => {
+app.post("/events", async (req, res) => {
   try {
     const savedEvent = await createEvent(req.body);
     res
@@ -53,7 +53,7 @@ const readAllEvents = async () => {
   }
 };
 
-app.get("/api/events", async (req, res) => {
+app.get("/events", async (req, res) => {
   try {
     const events = await readAllEvents();
     if (events.length > 0) {
@@ -87,7 +87,7 @@ const readEventsByTitleAndTags = async (title) => {
   }
 };
 
-app.get("/api/events/search/:title", async (req, res) => {
+app.get("/events/search/:title", async (req, res) => {
   const title = req.params.title;
   if (!title) {
     return res.status(400).json({ error: "Title parameter is required" });
@@ -113,7 +113,7 @@ const readEventsByType = async (type) => {
   }
 };
 
-app.get("/api/events/types/:type", async (req, res) => {
+app.get("/events/types/:type", async (req, res) => {
   try {
     const events = await readEventsByType(req.params.type);
     if (events.length > 0) {
@@ -137,7 +137,7 @@ const updateImageUrl = async (id, data) => {
 }
 
 // Use PUT method instead of POST for updating
-app.put("/api/events/:id", async (req, res) => {
+app.put("/events/:id", async (req, res) => {
     try {
         const updatedEvent = await updateImageUrl(req.params.id, req.body);
         if (updatedEvent) {
@@ -162,7 +162,7 @@ const readEventById = async (id) => {
   }
 };
 
-app.get("/api/events/:id", async (req, res) => {
+app.get("/events/:id", async (req, res) => {
   try {
     const event = await readEventById(req.params.id);
     if (event) {
@@ -184,7 +184,7 @@ const deleteEventById = async (id) => {
   }
 };
 
-app.delete("/api/events/:id", async (req, res) => {
+app.delete("/events/:id", async (req, res) => {
   try {
     const deletedEvent = await deleteEventById(req.params.id);
     if (deletedEvent) {
