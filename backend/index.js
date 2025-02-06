@@ -1,19 +1,19 @@
+require("dotenv").config();
 const express = require("express");
-
+const cors = require("cors");
 const app = express();
-
-app.use(express.json());
 
 const { initializeDatabase } = require("./db/db.connection");
 const Event = require("./models/event.model");
 
-const cors = require("cors");
 
+// CORS Configuration
 const corsOptions = {
   origin: "*",
   credentials: true,
 };
 
+app.use(express.json());
 app.use(cors(corsOptions));
 
 initializeDatabase();
@@ -198,9 +198,9 @@ app.delete("/events/:id", async (req, res) => {
   }
 });
 
-const PORT = 4000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server Running on port: ${PORT}`);
+  console.log(`Server Running on PORT: ${PORT}`);
 });
 
-module.exports = app;
+
