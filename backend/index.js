@@ -1,25 +1,27 @@
 const express = require("express");
-const { createServer } = require("@vercel/node");
-const cors = require("cors");
+
+const app = express();
+
+app.use(express.json());
 
 const { initializeDatabase } = require("./db/db.connection");
 const Event = require("./models/event.model");
 
-const app = express();
+const cors = require("cors");
 
-// Middleware
-app.use(express.json());
-app.use(cors({ origin: "*" }));
+const corsOptions = {
+  origin: "*",
+  credentials: true,
+};
 
-// Initialize Database
+app.use(cors(corsOptions));
+
 initializeDatabase();
 
-// Basic Route
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
   res.send("This is all about meetup App!!");
 });
 
-// Create Event
 const createEvent = async (event) => {
   try {
     const newEvent = new Event(event);
@@ -42,7 +44,6 @@ app.post("/api/events", async (req, res) => {
   }
 });
 
-// Read All Events
 const readAllEvents = async () => {
   try {
     const allEvent = await Event.find();
@@ -65,7 +66,6 @@ app.get("/api/events", async (req, res) => {
   }
 });
 
-// Search Events by Title or Tags
 const readEventsByTitleAndTags = async (title) => {
   try {
     // Searching by eventName (partial match allowed)
@@ -104,7 +104,6 @@ app.get("/api/events/search/:title", async (req, res) => {
   }
 });
 
-// Read Events by Type
 const readEventsByType = async (type) => {
   try {
     const events = await Event.find({ eventType: type });
@@ -127,34 +126,33 @@ app.get("/api/events/types/:type", async (req, res) => {
   }
 });
 
-// Update Event Image URL
 const updateImageUrl = async (id, data) => {
-  try {
-    const updatedEvent = await Event.findByIdAndUpdate(id, data, { new: true });
-    return updatedEvent;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-};
-
-app.put("/api/events/:id", async (req, res) => {
-  try {
-    const updatedEvent = await updateImageUrl(req.params.id, req.body);
-    if (updatedEvent) {
-      res.json({
-        message: "Event image URL updated successfully",
-        event: updatedEvent,
-      });
-    } else {
-      res.status(404).json({ error: "Event not Found" });
+    try {
+        const updatedEvent = await Event.findByIdAndUpdate(id, data, { new: true });
+        return updatedEvent;
+    } catch (error) {
+        console.log(error);
+        throw error; 
     }
-  } catch (error) {
-    res.status(500).json({ error: `Failed to update event: ${error}` });
-  }
+}
+
+// Use PUT method instead of POST for updating
+app.put("/api/events/:id", async (req, res) => {
+    try {
+        const updatedEvent = await updateImageUrl(req.params.id, req.body);
+        if (updatedEvent) {
+            res.json({
+                message: "Event image URL updated successfully",
+                event: updatedEvent,
+            });
+        } else {
+            res.status(404).json({ error: "Event not Found" });
+        }
+    } catch (error) {
+        res.status(500).json({ error: `Failed to update event: ${error}` });
+    }
 });
 
-// Read Event by ID
 const readEventById = async (id) => {
   try {
     const event = await Event.findById(id);
@@ -177,7 +175,6 @@ app.get("/api/events/:id", async (req, res) => {
   }
 });
 
-// Delete Event by ID
 const deleteEventById = async (id) => {
   try {
     const deletedEvent = await Event.findByIdAndDelete(id);
@@ -200,5 +197,7 @@ app.delete("/api/events/:id", async (req, res) => {
   }
 });
 
-// Export the server for Vercel serverless function
-module.exports = createServer(app);  // Vercel handler for serverless functions
+const PORT = 4000;
+app.listen(PORT, () => {
+  console.log(`Server Running on port: ${PORT}`);
+});
