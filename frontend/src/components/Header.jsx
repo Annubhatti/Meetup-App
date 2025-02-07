@@ -1,26 +1,37 @@
-import React from 'react'
+import React, { useState } from "react";
 import logo from "../images/logo.png";
 
-function Header() {
-  return (
-    <div>
-      <header>
-        <nav className='navbar bg-body-tertiary'>
-          <div className='container'>
-            <div className='navbar-brand'>
-              <img src={logo} alt="logo" width="100" height="auto"
-            
-               />
-            </div>
-            <div className='float-end'>
-              <input type="search" placeholder='⌕ Search by title and t...' />
-            </div>
-          </div>
-        </nav>
-      </header>
-      <hr />
-    </div>
-  )
-}
+const Header = ({ onSearch }) => {
+  const [query, setQuery] = useState("");
 
-export default Header
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setQuery(value);
+
+    // Call the parent function to fetch search results
+    if (onSearch) {
+      onSearch(value);
+    }
+  };
+
+  return (
+    <header>
+      <div className="container  py-3">
+        <img src={logo} alt="Company Logo" style={{ height: "70px", margin: "0", padding: "0" }} />
+        <div className="float-end pt-4 search-bar">
+          <input
+            type="text"
+            placeholder="⌕ Search by title and t..."
+            className="form-control"
+            value={query}
+            onChange={handleSearch}
+            aria-label="Search"
+          />
+        </div>
+      </div>
+      <hr />
+    </header>
+  );
+};
+
+export default Header;

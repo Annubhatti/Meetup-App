@@ -5,11 +5,16 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.js";
 
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import EventDetails from "./pages/EventDetails.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+  },
+  {
+    path: "/:eventId",
+    element: <EventDetails />,
   },
 ]);
 

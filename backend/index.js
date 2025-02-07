@@ -33,7 +33,7 @@ const createEvent = async (event) => {
   }
 };
 
-app.post("/api/events", async (req, res) => {
+app.post("/events", async (req, res) => {
   try {
     console.log("Incoming request:", req.body);
     const savedEvent = await createEvent(req.body);
