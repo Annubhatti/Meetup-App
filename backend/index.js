@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const serverless = require("serverless-http"); // Import serverless-http
 const app = express();
 
 const { initializeDatabase } = require("./db/db.connection");
@@ -198,9 +199,11 @@ app.delete("/events/:id", async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server Running on PORT: ${PORT}`);
-});
+// const PORT = process.env.PORT || 3000;
+// app.listen(PORT, () => {
+//   console.log(`Server Running on PORT: ${PORT}`);
+// });
+
+module.exports.handler = serverless(app);
 
 
