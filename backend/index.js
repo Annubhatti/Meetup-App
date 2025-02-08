@@ -204,6 +204,6 @@ app.delete("/events/:id", async (req, res) => {
 //   console.log(`Server Running on PORT: ${PORT}`);
 // });
 
-module.exports.handler = serverless(app);
+module.exports = serverless(app);
 
 
